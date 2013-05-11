@@ -1,0 +1,52 @@
+Function Map(inputList, mapFunction)
+	outputList = new List
+	jobList = new List
+	listOfWords = new List
+	listOfWords={....}
+	ajob = new Job
+	# Apply mapFunction to each fileName/fileLocation in inputList
+	# output to outputList
+	hostedOutputFileLocation = aLocationInServer
+	For Each (fileName, fileLocation) In inputList
+		hostedInputFileLocation = gridCopyToDataServer(filename/fileLocation)
+		jobID=gridSubmit(mapFunction,(fileName, hostedInputFileLocation))
+		Add jobID To jobList
+	Next
+	While(!jobList.empty)
+		For Each Id In JobList
+			If gridJobFinished(Id) = true Then
+				Print "Job with JobID "+Id+" finished"
+				ajob = getJobFromId(Id)
+				hostedOutputFileLocation = ajob.getOutputLocation()
+				fileContents = gridCopyFromDataServer(hostedOutputFileLocation)
+				Add fileContents In outputList
+				Remove Id from jobList
+			Else
+				Print "Job with JobID "+Id+" is still being proccessed"
+			EndIf
+		Next
+		Print "All Jobs Finished successfully"	
+	EndWhile
+	
+ 	
+	#check that a file has not been put in the output list twice.
+	For each fileName In outputList
+		For each currentName In outputList
+			remove currentName If currentName = fileName
+		Next
+	Next
+	Return outputList
+End Function 
+
+Function mapFunction(fileName, fileLocation)
+	matchCount = countMatches(<some_word>, fileLocation/fileName)
+	Return [(fileName, matchCount)] in hostedOutputFileLocation/outputfile
+End Function
+
+
+Assumptions
+============
+-The Grid will run the mapFunction again if an error exists(i.e. interrupt at the time of run time) for some reason
+-The file handling is so super duper high level that I can get the list from it just by using  fileContets.getList
+-gridSubmit returns the jobID of the job it just submitted
+
