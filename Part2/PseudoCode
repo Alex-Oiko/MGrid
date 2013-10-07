@@ -1,9 +1,9 @@
-Part 2
-iii) When the job is submitted to Gridsam, the program informs me of every action that is happening, with outputs in the stdout. It informs me when the JobManager object is created, when the JSDL description is created and when the job is submitted to the server. After a small wait, the server informs me of the id of the job and then the processing of the job is carried out. At that point theprogram is instructed to notify what the state of the job is. As it is visible from the picture, the job's progress is written in stdout from the staging-in part up until the point that it is done.
-
 Function Map(inputList, mapFunction)
 	outputList = new List
 	jobList = new List
+	listOfWords = new List
+	listOfWords={....}
+	ajob = new Job
 	# Apply mapFunction to each fileName/fileLocation in inputList
 	# output to outputList
 	hostedOutputFileLocation = aLocationInServer
@@ -16,7 +16,8 @@ Function Map(inputList, mapFunction)
 		For Each Id In JobList
 			If gridJobFinished(Id) = true Then
 				Print "Job with JobID "+Id+" finished"
-				hostedOutputFileLocation = Id.getOutputLocation()
+				ajob = getJobFromId(Id)
+				hostedOutputFileLocation = ajob.getOutputLocation()
 				fileContents = gridCopyFromDataServer(hostedOutputFileLocation)
 				Add fileContents In outputList
 				Remove Id from jobList
@@ -45,10 +46,7 @@ End Function
 
 Assumptions
 ============
--The Grid will run the mapFunction again if an error exists(i.e. interrupt at run time) for some reason.
--The file handling is so super duper high level that I can get the list from it just by using  fileContets.getList.
--gridSubmit returns the jobID of the job it just submitted.
--The user can get the output file location for a given input by applying a function to the Id called getOutputLocation().
--The mapFunction instead of just returning the (fileName,matchCount) now it adds this information in the respective output file.
--outputList can have duplicate entries(since a job with the same file can be processed twice).
+-The Grid will run the mapFunction again if an error exists(i.e. interrupt at the time of run time) for some reason
+-The file handling is so super duper high level that I can get the list from it just by using  fileContets.getList
+-gridSubmit returns the jobID of the job it just submitted
 
